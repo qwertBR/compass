@@ -1,6 +1,12 @@
+
+
+
 (function () {
   "use strict";
 
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
   //set to true for debugging output
   var debug = false;
 
@@ -11,6 +17,7 @@
     hng: null
   };
 
+  var num = 1000;
 
   // the outer part of the compass that rotates
   var rose = document.getElementById("rose");
@@ -20,6 +27,7 @@
   var positionLat = document.getElementById("position-lat");
   var positionLng = document.getElementById("position-lng");
   var positionHng = document.getElementById("position-hng");
+  var fine = document.getElementById("lol");
 
 
   // debug outputs
@@ -150,6 +158,8 @@
 
   // called on device orientation change
   function onHeadingChange(event) {
+    fine.textContent = "DUDE!!!!!";
+
     var heading = event.alpha;
 
     if (typeof event.webkitCompassHeading !== "undefined") {
@@ -190,11 +200,20 @@
       }
 
       positionCurrent.hng = heading + adjustment;
-
       var phase = positionCurrent.hng < 0 ? 360 + positionCurrent.hng : positionCurrent.hng;
-      positionHng.textContent = (360 - phase | 0) + "°";
+      positionHng.textContent = (360 - phase | 0) + "dude";
 
-
+      var n_num = 360 - phase | 0;
+      if (n_num === num) {
+        var j = 100000000;
+        while (j > 0){
+          j--;
+        }
+        fine.textContent = "FINE";
+      } else {
+        fine.textContent = "DUDE!";
+      }
+      num = n_num;
       // apply rotation to compass rose
       if (typeof rose.style.transform !== "undefined") {
         rose.style.transform = "rotateZ(" + positionCurrent.hng + "deg)";
@@ -207,6 +226,7 @@
       positionHng.textContent = "n/a";
       showHeadingWarning();
     }
+
   }
 
   function showHeadingWarning() {
